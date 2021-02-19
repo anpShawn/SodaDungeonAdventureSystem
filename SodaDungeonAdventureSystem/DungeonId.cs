@@ -1,0 +1,8 @@
+﻿using System;
+
+public enum DungeonId
+{
+    //DO NOT CHANGE THE ORDER OF THESE AS THEIR UNDERLYING INT VALUES IS USED TO STORE INFO IN THE SAVE FILE
+    CASTLE = 0,
+    ARENA = 1
+}

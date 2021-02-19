@@ -1,0 +1,16 @@
+﻿using System;
+
+[Flags]
+public enum ItemFlags
+{
+    RENDERS_ABOVE_HAND =1,
+    HAS_CAPE=2,
+    PREVENTS_BURN=4,
+    PREVENTS_STONE=8,
+    PREVENTS_BACK_ATK_BONUS=16,
+    PREVENTS_SLEEP=32,
+    CANT_BE_SOLD=64,
+    PREVENTS_SPEED_DOWN=128,
+    IS_UNIQUE = 256,
+    EXISTS_TEMPORARILY = 512
+}

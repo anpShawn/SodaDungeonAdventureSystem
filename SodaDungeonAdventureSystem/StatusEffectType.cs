@@ -1,0 +1,6 @@
+﻿
+public enum StatusEffectType {
+    BURN, POISON, STONE, SLEEP, CONFUSION,
+    SPEED_DOWN, SPEED_UP, ATK_DOWN, ATK_UP,
+    EVADE_UP, HP_REGEN, MP_REGEN, MARKED, STUNNED
+}
