@@ -98,11 +98,6 @@ public class Adventure
     public bool forceWarpAtNextPaths; //can be set to "true" by the foretell skill
 
     //flags/vars to track special achievements
-    public bool achievedInflictStatuses;
-    public bool achievedMinerSpecial;
-    public bool achievedUseSodaScript;
-    public bool achievedTransmuteToGold;
-
     public bool goldEarnedNewRecord;
     public bool essenceEarnedNewRecord;
     public bool enemiesKilledNewRecord;
@@ -167,9 +162,6 @@ public class Adventure
         playerTeam.AddPlayerCharactersFromList(inPlayerTeamMembers);
         playerTeam.PrepareForAdventure();
         playerTeam.CacheActiveSodaScriptReferences();
-
-        //was a custom script assigned?
-        achievedUseSodaScript = (playerTeam.numMembersUsingCustomSodaScript > 0);
 
         //kitchen boost 
         ApplyKitchenBoostToPlayerTeam();
@@ -269,11 +261,6 @@ public class Adventure
         warpGates.Sort(); //just a vanilla low to high sort, no params needed
 
         //REMOVED: code that would cache/handle various external upgrades, such as locksmithing and the ore blocker oddity
-    }
-
-    public void SetAsInteractiveCutscene()
-    {
-        isInteractiveCutscene = true;
     }
 
     public void ApplyKitchenBoostToPlayerTeam()

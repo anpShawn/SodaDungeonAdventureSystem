@@ -448,7 +448,6 @@ public class BattleManager
                 if(curTarget.HasStatusEffect(StatusEffectType.STONE) && curResult.skill.id == SkillId.PICKAXE)
                 {
                     hpChange *= GameContext.PICKAXE_AGAINST_STONE_MULTIPLIER;
-                    adventure.achievedMinerSpecial = true;
                 }
 
                 //back attack? can't back attack mineable ore
@@ -459,10 +458,6 @@ public class BattleManager
                         hpChange *= GameContext.BACK_ATTACK_MULTIPLIER;
                         curResult.wasBackAttack = true;
                         totalBackAttacks++;
-
-                        //achievement: back attack enemy while they are marked and stunned
-                        if (curTarget.HasStatusEffect(StatusEffectType.MARKED) && curTarget.HasStatusEffect(StatusEffectType.STUNNED) && curTarget.curFaction == Faction.ENEMY)
-                            adventure.achievedInflictStatuses = true;
                     }  
                 }
 
@@ -643,10 +638,6 @@ public class BattleManager
                             CharacterData newOre = CharacterData.Get(adventure.curOreTable.RollSpawn()).GetCopy();
                             newOre.UnsetFlags(CharacterFlags.DEATH_OPTIONAL); //unset the death optional flag, since the player transmuted them on purpose (it would be weird to instantly end the battle now)
                             curResult.transmuteResult = newOre;
-
-                            //alchemy achievement
-                            if (newOre.id == EnemyId.GOLD_ORE)
-                                adventure.achievedTransmuteToGold = true;
 
                             curTarget.GetCurTeam().TurnMemberInto(curTarget, newOre);
 
