@@ -21,15 +21,15 @@ This code has not been peer-reviewed, and I’ve never worked on a software deve
 This is not meant to be an empirical example of how to write a turn-based combat system. This is just my version of it which can hopefully serve as a reference point if you wish to write your own. This code could function as a starting point but I wouldn’t recommend copying it verbatim, as it carries a lot of baggage (discussed in “removed”)
 
 ## FEATURES
-Turn-based combat dictated by speed units
-1-6 member party, customizable with Equipment, Active Skills, and Passive Skills
-Endless progression with linear enemy scaling
-Loot Drops and Treasure Rooms
-Optional “Alternate” paths (healing fairy, traps, etc) 
-Status Effect management
-Skill Cooldowns
-Scriptable character behavior (see “Soda Scripts”)
-Object pooling of key data types to reduce memory churn
+* Turn-based combat dictated by speed units
+* 1-6 member party, customizable with Equipment, Active Skills, and Passive Skills
+* Endless progression with linear enemy scaling
+* Loot Drops and Treasure Rooms
+* Optional “Alternate” paths (healing fairy, traps, etc) 
+* Status Effect management
+* Skill Cooldowns
+* Scriptable character behavior (see “Soda Scripts”)
+* Object pooling of key data types to reduce memory churn
 
 ## GETTING STARTED
 Program.cs is the entry point for setting up and executing an “Adventure”
