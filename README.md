@@ -39,7 +39,8 @@ The core of this system resides in Adventure.cs and BattleManager.cs. They are t
 
 The CharacterData class (and child classes PlayerCharacterData and EnemyCharacterData) also do some heavy lifting. Most of the other classes serve as ways to model the data that the adventure system needs to work properly.
 
-I tried to find a balance between streamlining the core classes for understandability but also leaving in code that demonstrates extended functionality. I also wanted to show what my version of “shipped” code looks like without hiding poor choices.
+I tried to find a balance between streamlining the core classes for understandability but also leaving in code that demonstrates extended functionality. 
+**I also wanted to show what my version of “shipped” code looks like without hiding poor choices.**
 
 ## WHAT HAS BEEN REMOVED
 Whenever I removed or altered original code I tried to tag it with one of the following:
