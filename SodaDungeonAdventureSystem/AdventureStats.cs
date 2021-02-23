@@ -1,8 +1,8 @@
 ﻿public class AdventureStats
 {
     public DungeonId dungeonId;
-    public BigInteger highestLevelComplete;
-    public BigInteger essenceFromGnomes;
+    public long highestLevelComplete;
+    public long essenceFromGnomes;
     public CharacterTeam playerTeam;
     public int soulOrbsCaptured; 
     private int[] enemyKillCounts;

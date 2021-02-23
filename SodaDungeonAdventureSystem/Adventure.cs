@@ -13,7 +13,7 @@ public class Adventure
     public long battleNumBasedOn100 { get; private set; }
     public long battleNumInArea { get; private set; }
     public long dungeonLoops { get; private set; }
-    public BigInteger battleLimit { get; private set; }
+    public long battleLimit { get; private set; }
     public bool battleLimitReached { get; private set; }
     public AdventureInputMode inputMode { get; private set; }
     public long battlesCompleted { get; private set; }

@@ -140,7 +140,7 @@ public static class Utils
 
     private static StringBuilder builder = new StringBuilder();
     private static string notationSymbols = "KMBTqQsSONd";
-    public static string FormatBigInt(BigInteger inBig, bool inAllowFontDownsize=true, int inDownsizeAmt = 5)
+    public static string FormatBigInt(long inBig, bool inAllowFontDownsize=true, int inDownsizeAmt = 5)
     {
         //under 1000, return verbatim
         if (inBig < 1000) return inBig.ToString();
@@ -274,6 +274,7 @@ public static class Utils
         }
     }
 
+    /*
     public static int AsInt(this BigInteger source)
     {
         if (source < int.MaxValue) return int.Parse(source.ToString());
@@ -285,7 +286,7 @@ public static class Utils
         if (source < 0) return 0;
         else if (source < ulong.MaxValue) return ulong.Parse(source.ToString());
         else return ulong.MaxValue;
-    }
+    }*/
 
     public static int AsInt(this double source)
     {

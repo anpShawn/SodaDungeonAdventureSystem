@@ -23,25 +23,25 @@ using System;
         enforceMaxQuantities = false;
     }
 
-    public void AddGold(BigInteger inAmt)
+    public void AddGold(long inAmt)
     {
         if (inAmt < 0) return;
         AddLoot(LootType.CURRENCY, GameContext.STR_CURRENCY_GOLD, inAmt);
     }
 
-    public void AddEssence(BigInteger inAmt)
+    public void AddEssence(long inAmt)
     {
         if (inAmt < 0) return;
         AddLoot(LootType.CURRENCY, GameContext.STR_CURRENCY_ESSENCE, inAmt);
     }
 
-    public void AddCaps(BigInteger inAmt)
+    public void AddCaps(long inAmt)
     {
         if (inAmt < 0) return;
         AddLoot(LootType.CURRENCY, GameContext.STR_CURRENCY_CAPS, inAmt);
     }
 
-    public void AddLoot(LootType inType, string inId, BigInteger inQuantity)
+    public void AddLoot(LootType inType, string inId, long inQuantity)
     {
         if (condenseLootTypes)
         {
@@ -62,7 +62,7 @@ using System;
         loot.Add(newLoot);
     }
 
-    public void RemoveItem(string inItemId, BigInteger inQuantity)
+    public void RemoveItem(string inItemId, long inQuantity)
     {
         for (int i = loot.Count-1; i >= 0; i--)
         {
@@ -110,7 +110,7 @@ using System;
             if (loot[i].lootType == LootType.ITEM)
             {
                 Item item = Item.GetItem(loot[i].id);
-                item.quantity = BigInteger.ToInt32(loot[i].quantity);
+                item.quantity = (int)(loot[i].quantity);
                 list.Add(item);
             }
 
@@ -160,21 +160,21 @@ using System;
         return false;
     }
 
-    public BigInteger GetGold()
+    public long GetGold()
     {
         for (int i = 0; i < loot.Count; i++)
             if (loot[i].lootType == LootType.CURRENCY && loot[i].id == GameContext.STR_CURRENCY_GOLD) return loot[i].quantity;
         return 0;
     }
 
-    public BigInteger GetCaps()
+    public long GetCaps()
     {
         for (int i = 0; i < loot.Count; i++)
             if (loot[i].lootType == LootType.CURRENCY && loot[i].id == GameContext.STR_CURRENCY_CAPS) return loot[i].quantity;
         return 0;
     }
 
-    public BigInteger GetEssence()
+    public long GetEssence()
     {
         for (int i = 0; i < loot.Count; i++)
             if (loot[i].lootType == LootType.CURRENCY && loot[i].id == GameContext.STR_CURRENCY_ESSENCE) return loot[i].quantity;

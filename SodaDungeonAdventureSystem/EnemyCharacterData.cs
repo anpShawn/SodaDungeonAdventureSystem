@@ -311,12 +311,11 @@ using System.Linq;
         if (id == EnemyId.THE_DARKEST_ONE)
             return 0;
 
-        BigInteger amt = stats.Get(Stat.max_hp);
+        long amt = stats.Get(Stat.max_hp);
         amt += stats.Get(Stat.atk);
         amt /= 2;
 
-        if (amt > long.MaxValue) return long.MaxValue;
-        else return BigInteger.ToInt64(amt);
+        return amt;
     }
 
     public bool CanSpawnForAreaCompletion(int inCompletionPercent)

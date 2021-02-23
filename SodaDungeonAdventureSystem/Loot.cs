@@ -6,7 +6,7 @@
     //serialized
     private LootType _lootType;
     private string _id;
-    public BigInteger quantity;
+    public long quantity;
     [NonSerialized] private int _maxQuantity; //don't save this, it's only being set/used while an adventure is taking place
 
     //public properties
@@ -14,7 +14,7 @@
     public string id { get { return _id; } }
     public string name { get { return Locale.Get(_id); } }
 
-    public Loot(LootType inType, string inId, BigInteger inQuantity, int inMaxQuantity = -1)
+    public Loot(LootType inType, string inId, long inQuantity, int inMaxQuantity = -1)
     {
         _lootType = inType;
         _id = inId;
