@@ -72,5 +72,8 @@ There is some ambiguity in certain places when determining whose “responsibili
 
 Adventure.cs and BattleManager.cs are also quite big, coming in at about 2k and 1k lines of code, respectively. They aren’t quite “god” classes, but could probably stand to be broken up more.
 
-## COLLABORATION
+## LICENSE
+SodaDungeonAdventureSystem is licensed under the Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
+
+## CONTRIBUTION
 I welcome any feedback on this repository but please understand that unless a critical error is found I don’t intend to merge any part of this codebase back into the production version of Soda Dungeon 2.
