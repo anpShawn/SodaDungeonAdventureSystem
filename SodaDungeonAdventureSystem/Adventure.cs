@@ -520,13 +520,13 @@ public class Adventure
 
     public void WaitForManualInput()
     {
-        //broadcast event that says we would like some input. although the hud already displays skills at the request of the visual adventure observer
+        //broadcast event that says we would like some input
         Pause(AS_INTERNAL_PAUSE);
         if (EInputRequested != null) EInputRequested(this);
         isAcceptingManualInput = true;
     }
 
-    //HIDDEN: this function informs us that the player has manually chosen a skill and then a target to use it on. Requires mouse/touch input.
+    //HIDDEN: functions that inform us that the player has manually chosen a skill/path/treasure chest. Requires mouse/touch input.
     /*
     public void OnCharacterClicked(Character inTarget, Skill inActiveSkill)
     {
@@ -566,7 +566,7 @@ public class Adventure
                 ReceiveCommand(cachedSkillCommand);
             }
         }
-    }*/
+    }
 
     public void OnAltPathClicked(AltPathPortal inPortal)
     {
@@ -577,6 +577,7 @@ public class Adventure
     {
         treasureRoomSelection = inChoice;
     }
+    */
 
     public void OnTeamReviveAccepted()
     {
@@ -682,7 +683,7 @@ public class Adventure
         if (EAdventureStarted != null) EAdventureStarted(this);
         startTime = DateTime.Now;
 
-        //REMOVED: increment the use count of each character in the party for the game's records (requires save file)
+        //REMOVED: increment the use count of each character in the party for the game's records (requires persistent save file)
 
         LogAdventureMessage(Locale.Get("LOG_ADVENTURE_START", Utils.CommaFormatStringNumber(battleNum.ToString())), "icon_log_start");
 
@@ -823,7 +824,6 @@ public class Adventure
             }
         }
 
-        //broadcast
         //BE CAREFUL WITH BROADCASTING THIS EVENT- path-related logic still occurs below here.
         if (EAltPathConfirmed != null)
             EAltPathConfirmed(this, altPathSelection);
@@ -1146,9 +1146,6 @@ public class Adventure
         int maxNumEnemiesHoldingEssence = 1;
         numEnemiesHoldingEssence = 0;
 
-        //TODO temp fix to make the level 100 boss "tempered" (after dark lord leaves d1)
-        //bool temperBosses = (battleNum % 100 == 0 && !curFile.DarkLordIsInDungeon(dungeonData.type));
-
         enemyTeam.RemoveAllMembers();
         CharacterData enemyData;
         List<SpawnPoint> spawns = enemySpawnPattern.spawnPoints;
@@ -1352,40 +1349,7 @@ public class Adventure
         List<string> janitorSkills = new List<string>();
         janitorSkills.Add(SkillId.STRIKE);
 
-        if (inBossId == EnemyId.CHAMELEON)
-            janitorSkills.Add(SkillId.MEGA_CLAW);
-        else if (inBossId == EnemyId.LOBSTER)
-            janitorSkills.Add(SkillId.BUBBLE_CANNON);
-        else if (inBossId == EnemyId.DARKER_LORD_LARGE)
-            janitorSkills.Add(SkillId.DARK_SLASH);
-        else if (inBossId == EnemyId.DARK_LORD_MECH)
-        {
-            janitorSkills.Add(SkillId.LASER);
-            janitorSkills.Add(SkillId.ANIME_BLADE);
-        }
-        else if (inBossId == EnemyId.DARK_LADY_LARGE)
-        {
-            janitorSkills.Add(SkillId.FLUSTERSTORM);
-            janitorSkills.Add(SkillId.CUSPATE_BLADE);
-        }
-        else if (inBossId == EnemyId.PHONE)
-        {
-            janitorSkills.Add(SkillId.DIAL_IT_UP);
-            janitorSkills.Add(SkillId.WRONG_NUMBER);
-        }
-        else if (inBossId == EnemyId.LIGHT_LORD_LARGE)
-        {
-            janitorSkills.Add(SkillId.MEDITATE);
-            janitorSkills.Add(SkillId.SMITE);
-        }
-        else if (inBossId == EnemyId.VACATION_LORD_LARGE)
-            janitorSkills.Add(SkillId.DELUGE);
-        else if(inBossId == EnemyId.DARKEST_LORD_LARGE)
-        {
-            janitorSkills.Add(SkillId.CRYSTAL_TOSS);
-            janitorSkills.Add(SkillId.DARK_DREAMS);
-        }
-
+        //REMOVED: code that gives the janitor specific boss skills
 
         inJanitor.baseStats.Set(Stat.atk, boss.baseStats.Get(Stat.atk));
         inJanitor.baseStats.Set(Stat.hp, boss.baseStats.Get(Stat.hp));
@@ -1515,12 +1479,6 @@ public class Adventure
         if (EAdventureEnded != null) EAdventureEnded(this, adventureStats, adventureLoot);
     }
 
-    public int GetMegaChestKeyCost()
-    {
-        //TODO eventually maybe change this depending how far in the dungeon we are. for now, always 3
-        return 3;
-    }
-
     private void CheckForTreasureRoom()
     {
         if(dungeonData.IsTreasureLevel(battleNumInArea))
@@ -1566,26 +1524,12 @@ public class Adventure
 
     private void ConfirmTreasureRoomSelectionIfApplicable()
     {
-        if (isInsideTreasureRoom) //curbattle is treasure room
+        if (isInsideTreasureRoom)
             EnactTreasureRoomSelection();
     }
 
     private void EnactTreasureRoomSelection()
     {
-        //the regular treasure loot was already calculated up above, we only stop here to see if we need to swap for a mega chest
-        if(treasureRoomSelection == TreasureRoomChoice.MEGA_CHEST)
-        {
-            //turn the existing loot into mega chest loot
-            treasureLoot.Empty();
-            string itemId = RollItemForArea();
-            treasureLoot.AddLoot(LootType.ITEM, itemId, 1);
-
-            //spend the keys
-            keys -= GetMegaChestKeyCost();
-            if (EAdventureKeyUsed != null)
-                EAdventureKeyUsed(this);
-        }
-
         if (ETreasureRoomConfirmed != null)
             ETreasureRoomConfirmed(this, treasureLoot);
 
@@ -1667,28 +1611,6 @@ public class Adventure
         int itemFindBonus = playerTeam.teamItemFindBonus + (curBattleIsAmbush ? 10 : 0);
         List<Item> itemPool = battleItemPool;
 
-        bool rollForRarity = false;
-        if(rollForRarity)
-        {
-            //roll for a specific item pool first, THEN the item
-            if (mythicItemPool.Count() > 0 && Utils.OneIn(Math.Max(500 - itemFindBonus, 1)))
-            {
-                itemPool = mythicItemPool;
-            }
-            else if (legendaryItemPool.Count() > 0 && Utils.OneIn(Math.Max(300 - itemFindBonus, 1)))
-            {
-                itemPool = legendaryItemPool;
-            }
-            else if(rareItemPool.Count() > 0 && Utils.OneIn(Math.Max(100 - itemFindBonus, 1)))
-            {
-                itemPool = rareItemPool;
-            }
-            else
-            {
-                itemPool = commonUncommonItemPool;
-            }
-        }
-
         Rarity minRarityToUseItemFindFor = Rarity.RARE;
         if (playerTeam.teamItemFindBonus >= 200) minRarityToUseItemFindFor = Rarity.MYTHIC;
         else if (playerTeam.teamItemFindBonus >= 100) minRarityToUseItemFindFor = Rarity.LEGENDARY;
@@ -1698,17 +1620,9 @@ public class Adventure
             potentialItem = itemPool.GetRandomElement();
             spawnRate = potentialItem.spawnRate;
 
-            //if using the "roll for rarity" method, we don't need to make any further adjustments to spawn rate since we're specifying an exact rarity group to choose from
-            if (rollForRarity)
+            if (potentialItem.rarity >= minRarityToUseItemFindFor)
             {
                 spawnRate -= itemFindBonus;
-            }
-            else
-            {
-                if (potentialItem.rarity >= minRarityToUseItemFindFor)
-                {
-                    spawnRate -= itemFindBonus;
-                }
             }
                 
             if (spawnRate < 1) spawnRate = 1;
@@ -1816,7 +1730,6 @@ public class Adventure
             playerSurrendered = true;
 
             cachedSkillCommand.Reset(Skill.GetSkill(SkillId.SURRENDER), battleManager.activeCharacter);
-            //cachedSkillCommand.AddTarget(enemyTeam.members[0]);
             ReceiveCommand(cachedSkillCommand);
         }
 
