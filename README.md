@@ -32,10 +32,8 @@ This is not meant to be an empirical example of how to write a turn-based combat
 * Object pooling of key data types to reduce memory churn
 
 ## GETTING STARTED
-Program.cs is the entry point for setting up and executing an “Adventure”
-The first step is to initialize a chunk of data relating to characters, items, skills and more.
-Afterward we subscribe to a number of listeners that the Adventure class offers.
-Lastly we start the adventure and watch its output in the console.
+Program.cs is the entry point for setting up and executing an “Adventure.” The first step is to initialize a chunk of data relating to characters, items, skills and more.
+Afterward we subscribe to a number of listeners that the Adventure class offers. Lastly we start the adventure and watch its output in the console.
 
 The core of this system resides in Adventure.cs and BattleManager.cs. They are two tightly-coupled classes that communicate back and forth to produce the results seen on screen. In the real game I use what I call a “Visual Adventure Observer” to listen to Adventure’s events, pause it, play animations, then resume it.
 
@@ -57,7 +55,6 @@ More specifically, the removed portions generally fall into one of these categor
 * Miscellaneous debug code
 
 That being said, there is still a lot of extraneous code present. Much of it deals with logic for specific skills, classes, and items that have been removed from this version. 
-
 
 ## EXTENDING FUNCTIONALITY
 In order to keep things simple I have recreated only a small portion of the characters, items, skills, and enemies found in the real game. If you wish to add more of any of these to the game it should be pretty straightforward to do so if you use the existing code as a template.
