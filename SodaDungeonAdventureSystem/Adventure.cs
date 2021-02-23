@@ -68,7 +68,6 @@ public class Adventure
     public SpawnTable curOreTable { get; private set; }
     private List<Item> areaItemPool;
     private List<Item> battleItemPool;
-    private List<Item> megaChestItemPool;
 
     private List<Item> mythicItemPool;
     private List<Item> legendaryItemPool;
@@ -186,7 +185,6 @@ public class Adventure
         inputMode = AdventureInputMode.MANUAL;
 
         battleItemPool = new List<Item>();
-        megaChestItemPool = new List<Item>();
 
         mythicItemPool = new List<Item>();
         legendaryItemPool = new List<Item>();
@@ -1579,7 +1577,7 @@ public class Adventure
         {
             //turn the existing loot into mega chest loot
             treasureLoot.Empty();
-            string itemId = RollItemForArea(true);
+            string itemId = RollItemForArea();
             treasureLoot.AddLoot(LootType.ITEM, itemId, 1);
 
             //spend the keys
@@ -1658,7 +1656,7 @@ public class Adventure
         }
     }
 
-    public string RollItemForArea(bool inForMegaChest=false)
+    public string RollItemForArea()
     {
         Item itemFound = null;
         Item potentialItem;
@@ -1667,12 +1665,7 @@ public class Adventure
         int loops = 0;
 
         int itemFindBonus = playerTeam.teamItemFindBonus + (curBattleIsAmbush ? 10 : 0);
-        if (inForMegaChest) itemFindBonus += 5;
-
-        List<Item> itemPool = inForMegaChest ? megaChestItemPool : battleItemPool;
-
-        //return ItemId.BULLSEYE_SHIELD;
-        //Main.Trace(itemPool[0].name + ", " + itemPool[1].name);
+        List<Item> itemPool = battleItemPool;
 
         bool rollForRarity = false;
         if(rollForRarity)
