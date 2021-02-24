@@ -25,9 +25,9 @@ namespace SodaDungeonAdventureSystem
             EnemyCharacterData.CreateEnemyCharacters();
             PoolManager.CreateObjectPools();
 
-            //create two characters for our party and add them to a list
-            var character1 = (PlayerCharacterData)CharacterData.Get(CharId.SODA_JUNKIE).GetCopy();
-            var character2 = (PlayerCharacterData)CharacterData.Get(CharId.NURSE).GetCopy();
+            //create two characters for our party and add them to a list. It's important that we create them as copies of the prototypes from the master character collection
+            var character1 = (PlayerCharacterData)CharacterData.GetCopy(CharId.SODA_JUNKIE);
+            var character2 = (PlayerCharacterData)CharacterData.GetCopy(CharId.NURSE);
 
             var playerCharacters = new List<PlayerCharacterData>();
             playerCharacters.Add(character1);

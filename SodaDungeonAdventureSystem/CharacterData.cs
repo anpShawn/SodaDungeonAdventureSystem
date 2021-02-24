@@ -92,6 +92,11 @@ public abstract class CharacterData
         return characterCollection[id];
     }
 
+    public static CharacterData GetCopy(string id)
+    {
+        return Get(id).GetCopy();
+    }
+
 
 
 
