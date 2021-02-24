@@ -1,9 +1,6 @@
-﻿using System;
-
-
+﻿
 public class SwiftMetal : Skill
 {
-
 	public SwiftMetal():base(SkillId.SWIFT_METAL)
     {
     }

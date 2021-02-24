@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-
+﻿
 public class Meteor : Skill
 {
 	public Meteor():base(SkillId.METEOR)

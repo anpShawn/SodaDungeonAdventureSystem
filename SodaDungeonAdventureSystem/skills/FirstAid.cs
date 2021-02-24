@@ -1,5 +1,4 @@
-﻿using System.Collections;
-
+﻿
 public class FirstAid : Skill
 {
 

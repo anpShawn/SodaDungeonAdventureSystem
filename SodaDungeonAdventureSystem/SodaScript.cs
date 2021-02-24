@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 
 
-[Serializable]public class SodaScript
+public class SodaScript
 {
     private static List<SodaScript> scripts;
     private static SodaScriptTrigger defaultTrigger;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-[Serializable] public class PlayerCharacterData : CharacterData
+public class PlayerCharacterData : CharacterData
 {
     //static
     public static Dictionary<string, PlayerCharacterData> playerCollection { get; private set; }

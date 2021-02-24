@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-[Serializable] public class EnemyCharacterData : CharacterData
+public class EnemyCharacterData : CharacterData
 {
     protected static Dictionary<string, EnemyCharacterData> enemyCollection;
     private static List<EnemyCharacterData> enemyCollectionList;

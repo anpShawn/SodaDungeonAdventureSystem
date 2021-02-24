@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-[Serializable]public class AutoKeyAndPathSettings
+public class AutoKeyAndPathSettings
 {
     public bool saveKeysForHealing;
     public int teamHPHealPercent;

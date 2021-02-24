@@ -1,7 +1,6 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 
-[Serializable]public class SodaScriptTrigger
+public class SodaScriptTrigger
 {
     public SodaScriptTarget target;
     public SodaScriptCondition condition;

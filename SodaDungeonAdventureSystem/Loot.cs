@@ -1,13 +1,12 @@
 ﻿using System;
 
-[Serializable]public class Loot
+public class Loot
 {
-
     //serialized
     private LootType _lootType;
     private string _id;
     public long quantity;
-    [NonSerialized] private int _maxQuantity; //don't save this, it's only being set/used while an adventure is taking place
+    private int _maxQuantity; //don't save this, it's only being set/used while an adventure is taking place
 
     //public properties
     public LootType lootType { get { return _lootType; } }

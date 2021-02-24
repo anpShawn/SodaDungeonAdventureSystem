@@ -4,9 +4,6 @@ using System.Collections.Generic;
 public class Skill
 {
     public static List<Skill> skills;
-    private static List<Action> stepsInAnimation;
-    private static int stepIndex;
-
 
 
     public string id;
@@ -27,8 +24,6 @@ public class Skill
 
     protected int targetsHit;
     protected float attackMultiplier; //this is only used as an easy way to show the user if this skill can be easily described as multiplying their attack power
-
-    public event Action EAnimationComplete;
 
     public static void CreateSkills()
     {
@@ -62,9 +57,6 @@ public class Skill
         CreateSkill<Heal>(SkillType.MAGICAL, 1, SkillTarget.SINGLE, DOESNT_DISPLAY_NAME, IS_FRIENDLY, IS_HEALING, SELF_TARGETS);
 
         CreateSkill<Meteor>(SkillType.PHYSICAL, 3, SkillTarget.SINGLE, DISPLAYS_NAME);
-
-        //create an empty steps list to use later
-        stepsInAnimation = new List<Action>();
     }
 
     private static Skill CreateSkill<T>(SkillType inType, int inMpCost, SkillTarget inTargetType, bool inDisplaysName, bool inIsFriendly=false, bool inIsHealing=false, bool inAllowsSelfTarget = false, StatusEffectCategory inEffectCategory = StatusEffectCategory.NONE, bool inAllowedForArenaNpcs = true)where T:Skill, new()

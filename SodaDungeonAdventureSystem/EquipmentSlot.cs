@@ -1,6 +1,6 @@
 ﻿using System;
 
-[Serializable]public class EquipmentSlot
+public class EquipmentSlot
 {
     //serialized
     private string _id;

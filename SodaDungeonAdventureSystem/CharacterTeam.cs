@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-public class CharacterTeam {
-
+public class CharacterTeam
+{
     public List<CharacterData> members { get; private set; }
     private List<CharacterData> randomMemberList; //use this to speed up the process of grabbing a random member
     public Faction faction;

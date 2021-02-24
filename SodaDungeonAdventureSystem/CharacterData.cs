@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-[Serializable] public abstract class CharacterData
+public abstract class CharacterData
 {
     //static
     protected static Dictionary<string, CharacterData> characterCollection;
@@ -33,7 +33,6 @@ using System.Runtime.Serialization;
     [NonSerialized]public int orderInTeam;
     [NonSerialized]public int originalOrderInTeam; //store original order separately for soda script comparisons. normal "orderInTeam" updates as other team members die
     [NonSerialized]public int teamsId;
-    [NonSerialized]public int accumulatedMasteryXp; //DEPRECATED, NO LONGER USED FOR ACTUAL ACCUMULATED XP
     [NonSerialized]public Vector2 spawnPosition;
     [NonSerialized]public bool hasBeenStolenFrom;
     [NonSerialized]public int darkSaviorUseCount;

@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System;
+﻿using System.Collections.Generic;
 
-[Serializable] public class LootBundle : IPoolable
+public class LootBundle : IPoolable
 {
     //serialized
     private List<Loot> _loot;
