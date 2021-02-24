@@ -9,6 +9,7 @@ namespace SodaDungeonAdventureSystem
         {
             Console.WriteLine("Soda Dungeon Adventure System");
 
+            //initialize data that the adventure requires to run
             Stats.BuildDefaultStats();
             SkillId.CacheIds();
             Skill.CreateSkills();
@@ -22,9 +23,9 @@ namespace SodaDungeonAdventureSystem
             CharacterData.InitCharacterCollection();
             PlayerCharacterData.CreatePlayerCharacters();
             EnemyCharacterData.CreateEnemyCharacters();
-
             PoolManager.CreateObjectPools();
 
+            //create two characters for our party and add them to a list
             var character1 = (PlayerCharacterData)CharacterData.Get(CharId.SODA_JUNKIE).GetCopy();
             var character2 = (PlayerCharacterData)CharacterData.Get(CharId.NURSE).GetCopy();
 
@@ -32,18 +33,24 @@ namespace SodaDungeonAdventureSystem
             playerCharacters.Add(character1);
             playerCharacters.Add(character2);
 
+            //create a new adventure in the castle, provide characters, and set input mode to auto (otherwise the adventure will stop and wait for player input)
             var adventure = new Adventure(DungeonId.CASTLE, playerCharacters);
             adventure.SetInputMode(AdventureInputMode.AUTO);
-            //adventure.showVerboseOutput = true;
 
+            //set this to true if you want the adventure to log a message every time it processes a step
+            adventure.showVerboseOutput = false;
+
+            //listen for various events to receive information about the adventure progress
             adventure.EBattleStarted += OnBattleStarted;
             adventure.ESkillUsed += OnSkillUsed;
             adventure.ESkillResolved += OnSkillResolved;
             adventure.EEnemyLootEarned += OnEnemyLootEarned;
             adventure.ECharactersDied += OnCharactersDied;
 
+            //start the adventure
             adventure.Start();
 
+            //read key so that the output window won't close immediately after the adventure finishes
             Console.ReadKey();
         }
 

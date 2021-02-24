@@ -247,9 +247,6 @@ public class BattleManager
             {
                 BuildTurnQueue();
                 SortTurnQueue();
-
-                //Main.Trace("turn queue built: ");
-                //Utils.PrintList(turnQueue);
             }
 
             if (turnQueue.Count > 0)
@@ -259,9 +256,7 @@ public class BattleManager
             }
         }
         while (nextCharacter == null);
-        //while (!nextCharacter.IsAbleToTakeTurn());
 
-        //Main.Trace("next character is: " + nextCharacter.id);
         return nextCharacter;
     }
 
