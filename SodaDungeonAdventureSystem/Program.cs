@@ -28,10 +28,14 @@ namespace SodaDungeonAdventureSystem
             //create two characters for our party and add them to a list. It's important that we create them as copies of the prototypes from the master character collection
             var character1 = (PlayerCharacterData)CharacterData.GetCopy(CharId.SODA_JUNKIE);
             var character2 = (PlayerCharacterData)CharacterData.GetCopy(CharId.NURSE);
+            var character3 = (PlayerCharacterData)CharacterData.GetCopy(CharId.CARPENTER);
+            var character4 = (PlayerCharacterData)CharacterData.GetCopy(CharId.NURSE);
 
             var playerCharacters = new List<PlayerCharacterData>();
             playerCharacters.Add(character1);
             playerCharacters.Add(character2);
+            playerCharacters.Add(character3);
+            playerCharacters.Add(character4);
 
             //create a new adventure in the castle, provide characters, and set input mode to auto (otherwise the adventure will stop and wait for player input)
             var adventure = new Adventure(DungeonId.CASTLE, playerCharacters);
@@ -40,12 +44,19 @@ namespace SodaDungeonAdventureSystem
             //set this to true if you want the adventure to log a message every time it processes a step
             adventure.showVerboseOutput = false;
 
+            //when input mode is set to auto, combat decisions will handled by soda script. however, we can still allow the player to choose random treasure chests and paths.
+            //this is off by default; if you turn it on you must listen for events such as EAltPathsEncountered and respond with OnAltPathClicked(choice)
+            adventure.requireInputForRandomChoices = false;
+
             //listen for various events to receive information about the adventure progress
             adventure.EBattleStarted += OnBattleStarted;
             adventure.ESkillUsed += OnSkillUsed;
             adventure.ESkillResolved += OnSkillResolved;
             adventure.EEnemyLootEarned += OnEnemyLootEarned;
             adventure.ECharactersDied += OnCharactersDied;
+            adventure.EAltPathsEncountered += OnAltPathsEncountered;
+            adventure.EAltPathConfirmed += OnAltPathConfirmed;
+            adventure.ETreasureRoomConfirmed += OnTreasureRoomConfirmed;
 
             //start the adventure
             adventure.Start();
@@ -90,6 +101,29 @@ namespace SodaDungeonAdventureSystem
         {
             for(int i=0; i<inDeadCharacters.Count; i++)
                 Console.WriteLine($"{inDeadCharacters[i].id} died");
+        }
+
+        private static void OnAltPathsEncountered(Adventure inAdventure, AltPathPortal[] inChoices)
+        {
+            var choices = new List<string>();
+            for (int i = 0; i < inChoices.Length; i++)
+                choices.Add(inChoices[i].destination.ToString());
+
+            Console.Write("\nAlternate paths encountered:");
+            Utils.PrintList(choices);
+        }
+
+        private static void OnAltPathConfirmed(Adventure inAdventure, AltPathPortal inChoice)
+        {
+            if (inChoice == null)
+                Console.WriteLine("No alternate path chosen");
+            else
+                Console.WriteLine("Alternate path chosen: " + inChoice.destination);
+        }
+
+        private static void OnTreasureRoomConfirmed(Adventure inAdventure, LootBundle inLoot)
+        {
+            Console.WriteLine("Treasure Room entered, found: " + inLoot.ToString());
         }
     }
 }

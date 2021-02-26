@@ -75,10 +75,6 @@ public class SaveFile
     {
     }
 
-    public void UpdateHighestLevelCompletedIfHigher(DungeonId inId, long inLevel)
-    {
-    }
-
     //assume any flag is set to true
     public bool FlagIsSet(int inFlag)
     {

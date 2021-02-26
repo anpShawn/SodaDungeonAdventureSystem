@@ -14,7 +14,7 @@ public static class Utils
     public static string PrintArray<T>( T[] inArr)
     {
         StringBuilder sb = new StringBuilder();
-        sb.Append("printing array with " + inArr.Length + " elements");
+        //sb.Append("printing array with " + inArr.Length + " elements");
         sb.AppendLine();
         for(int i=0; i<inArr.Length; i++)
         {

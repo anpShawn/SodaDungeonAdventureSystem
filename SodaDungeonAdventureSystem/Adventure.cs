@@ -78,16 +78,12 @@ public class Adventure
     public List<string> classesThatLeveledUp { get; private set; }
     public Dictionary<string, int> skillUseCounts { get; private set; }
 
-    public bool isUsingBattleCredits { get; private set; }
-    private int battleCreditsRemaining;
-    private int battleCreditsSpent;
     public bool showVerboseOutput;
+    public bool requireInputForRandomChoices;
     private bool AS_INTERNAL_PAUSE = false; //used to show the pause came from inside this class/battle
 
     public bool isInteractiveCutscene { get; private set; }
     public bool playerSurrendered { get; private set; }
-
-    public List<Item> itemsFoundByBlacksmith;
 
     //vars to aid with special skill effects, usually from cooking meals
     public int nextOreBonusDrops;
@@ -120,7 +116,6 @@ public class Adventure
     public event Action<Adventure, CharacterData> ECharacterActivated;
     public event Action<Adventure, SkillCommand> ESkillUsed;
     public event Action<Adventure, List<SkillResult>> ESkillResolved;
-    //public event Action<Adventure> ETurnEnded;
     public event Action<Adventure, CharacterData, StatusEffect> EStatusProc;
     public event Action<Adventure, CharacterData, StatusEffect> EStatusExpired;
     public event Action<Adventure, CharacterData, long, long> ERegenProc;
@@ -147,11 +142,9 @@ public class Adventure
         insideBattle = false;
         isComplete = false;
         isAcceptingManualInput = false;
+
         cachedSkillCommand = new SkillCommand();
-
-        //cache cur file reference for convenience
         curFile = SaveFile.GetSaveFile();
-
         pathSettings = new AutoKeyAndPathSettings();
 
         //create teams. enemy team will be re-populated at each new battle
@@ -244,8 +237,6 @@ public class Adventure
         if (GameContext.DEBUG_MAX_DUNGEON_KEYS)
             keys = 999;
 
-        itemsFoundByBlacksmith = new List<Item>();
-
         //set up warp gates
         warpGates = new List<int>();
 
@@ -269,16 +260,6 @@ public class Adventure
         if(kitchenBoostPercent > 0)
             playerTeam.BoostMaxHPByPercent(kitchenBoostPercent);
             */
-    }
-
-    public void InsertBattleCredits(int inCredits)
-    {
-        isUsingBattleCredits = true;
-        battleCreditsRemaining = inCredits;
-        SetInputMode(AdventureInputMode.AUTO);
-
-        //when running on credits, the battle limit is the highest level we've reached without credits
-        battleLimit = curFile.GetHighestLevelCompleted(dungeonData.type);
     }
 
     public void SetInputMode(AdventureInputMode inMode)
@@ -691,13 +672,7 @@ public class Adventure
     }
 
     private void GotoBattleOrAltPath()
-    {
-        if (isUsingBattleCredits)
-        {
-            battleCreditsRemaining--;
-            battleCreditsSpent++;
-        }
-            
+    {   
         curBattleIsAltPath = false;
         bool forcePath = (GameContext.DEBUG_CONSTANT_DOORS && battleNumBasedOn10 > 1 && (battleNumBasedOn10 % 2 != 0));
         bool pathAppearsNaturally = (battleNum > 10 && areaAltPathsEncountered < 2 && (battleNumBasedOn10 == 3 || battleNumBasedOn10 == 6 || battleNumBasedOn10 == 8) && Utils.PercentageChance(35));
@@ -773,14 +748,9 @@ public class Adventure
             EAltPathsEncountered(this, altPathPortals);
 
         //if nothing is "listening" to the adventure, proceed immediately
-        if(isUsingBattleCredits)
+        if(!requireInputForRandomChoices)
         {
             altPathSelection = ChoosePortalBasedOnKeySettings(altPathPortals);
-
-            //cancel selection if warp was chosen, this option is pointless for battle credits
-            if (altPathSelection != null && altPathSelection.destination == AltPathResult.WARP)
-                altPathSelection = null;
-
             EnactAltPathSelection();
         }
     }
@@ -1377,39 +1347,6 @@ public class Adventure
             }
         }
 
-        //check for end scenarios involving battle credits, and/or broadcast events about normal end scenarios
-        if(isUsingBattleCredits && EBattleCreditEventOccured != null)
-        {
-            if (playerTeam.AllMembersDefeated())
-            {
-                EBattleCreditEventOccured(this, BattleCreditEvent.PLAYER_TEAM_DEFEATED, "");
-            }
-            else if(battleLimitReached)
-            {
-                EBattleCreditEventOccured(this, BattleCreditEvent.BATTLE_LIMIT_REACHED, "");
-            }
-            else
-            {
-                //we can check for story events but generally speaking, story events only happen on levels already completed. and if we haven't completed the level, we'll get caught by a battle limit
-                //this can be used if story events suddenly appear at a lower level of completion, but right now that doesn't happen
-                /*
-                long nextLevel = battleNum + 1;
-                if(file.DarkLordFightsAtBattle(nextLevel, dungeonData.type) || file.DarkLordIssuesChallengeAtBattle(nextLevel, dungeonData.type))
-                {
-                    battleLimitReached = true;
-                    EBattleCreditEventOccured(this, BattleCreditEvent.STORY_EVENT_REACHED, "");
-                }
-                */
-
-                //if we made it this far and no event has ended the adventure, also check to see if there are no more battle credits
-                if(!battleLimitReached && battleCreditsRemaining<=0)
-                {
-                    Pause(AS_INTERNAL_PAUSE);
-                    EBattleCreditEventOccured(this, BattleCreditEvent.INSERT_CREDITS_TO_CONTINUE, "");
-                }
-            }
-        }
-
         if (playerTeam.AllMembersDefeated() || battleLimitReached)
         {
             //there are various win/loss conditions but for now, if the player team is dead, the adventure is over
@@ -1439,35 +1376,7 @@ public class Adventure
 
         //REMOVED: check for classes that have leveled up and award them relics if applicable
 
-        //NEW BLACKSMITH ITEMS
-        if(!dungeonData.IsAnArena() && !isUsingBattleCredits)
-        {
-            itemsFoundByBlacksmith.Clear();
-            string itemId;
-            Item newItem;
-            for(int i=0; i<5; i++)
-            {
-                itemId = RollItemForArea();
-                newItem = Item.GetItem(itemId);
-
-                if (newItem.rarity > Rarity.RARE)
-                    continue;
-
-                itemsFoundByBlacksmith.Add(newItem.GetCopy());
-            }
-
-            //red crystals?
-            if(battleNum > 500)
-            {
-                newItem = Item.GetItem(ItemId.RED_CRYSTAL).GetCopy();
-                newItem.AddQuantity(Utils.RandomInRange(1, 11));
-                itemsFoundByBlacksmith.Add(newItem);
-            }
-        }
-        
-        //BATTLE CREDIT REFUND
-        if (isUsingBattleCredits && battleCreditsRemaining > 0 && EBattleCreditEventOccured != null)
-            EBattleCreditEventOccured(this, BattleCreditEvent.CREDITS_REFUNDED, battleCreditsRemaining.ToString());
+        //REMOVED: generate new items for the blacksmith to sell in town
 
         //REMOVED: report anonymous dungeon stats to server
         
@@ -1484,11 +1393,6 @@ public class Adventure
         if(dungeonData.IsTreasureLevel(battleNumInArea))
         {
             isInsideTreasureRoom = true;
-
-            //record the highest level complete every time we hit a treasure room so that autosave properly captures it in case of a game crash
-            if(!isUsingBattleCredits)
-                curFile.UpdateHighestLevelCompletedIfHigher(dungeonData.type, battleNum);
-
             OfferTreasureRoom();
         }
     }
@@ -1514,7 +1418,7 @@ public class Adventure
             ETreasureRoomEncountered(this, numChests);
 
         //TODO: if nothing is "listening" to the adventure, force a choice
-        if(isUsingBattleCredits)
+        if(!requireInputForRandomChoices)
         {
             //unlike alt paths, there MUST be a treasure choice. in the case of alt paths, "no path" is a valid choice
             treasureRoomSelection = TreasureRoomChoice.NORMAL_CHEST;
@@ -1731,13 +1635,6 @@ public class Adventure
 
             cachedSkillCommand.Reset(Skill.GetSkill(SkillId.SURRENDER), battleManager.activeCharacter);
             ReceiveCommand(cachedSkillCommand);
-        }
-
-        //special exception when using battle credits
-        if(isUsingBattleCredits)
-        {
-            playerTeam.KillAllMembers();
-            EndAdventure();
         }
     }
 
