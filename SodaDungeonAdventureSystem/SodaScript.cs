@@ -82,18 +82,6 @@ public class SodaScript
         trigger.SetSkill(SodaScriptSkillCategory.DEFAULT);
         scripts.Add(script);
 
-        //DARK LADY
-        script = new SodaScript(SCRIPT_DARK_LADY);
-        script._isReadonly = true;
-
-        trigger = script.AddTrigger(SodaScriptTarget.ENEMY, SodaScriptCondition.TEAM_NUM_BACK_TURNED, SodaScriptComparison.GREATER_THAN, "0");
-        trigger.SetSkill(SodaScriptSkillCategory.SPECIFIC, SkillId.CUSPATE_BLADE);
-
-        trigger = script.AddTrigger(SodaScriptTarget.ENEMY, SodaScriptCondition.TEAM_NUM_BACK_TURNED, SodaScriptComparison.LESS_THAN, "3");
-        trigger.SetSkill(SodaScriptSkillCategory.SPECIFIC, SkillId.FLUSTERSTORM);
-
-        scripts.Add(script);
-
         //PLAYER
         script = new SodaScript(SCRIPT_DEFAULT_PLAYER);
         script._isReadonly = true;

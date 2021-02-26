@@ -23,7 +23,6 @@ public class BattleManager
     private bool playerTeamHasRevivedOnceThisTrip;
 
     private SodaScript defaultEnemyScript;
-    private SodaScript darkLadyScript;
 
     public event Action EBattleStarted;
     public event Action<CharacterData, CharacterData> ECharacterTransformed;
@@ -78,7 +77,6 @@ public class BattleManager
 
 
         defaultEnemyScript = SodaScript.GetPremadeScript(SodaScript.SCRIPT_DEFAULT_ENEMY);
-        darkLadyScript = SodaScript.GetPremadeScript(SodaScript.SCRIPT_DARK_LADY);
 
         playerTeamHasRevivedOnceThisTrip = false;
     }
@@ -352,10 +350,7 @@ public class BattleManager
         }
         else
         {
-            if (activeCharacter.id == EnemyId.DARK_LADY_LARGE)
-                acScript = darkLadyScript;
-            else
-                acScript = defaultEnemyScript;
+            acScript = defaultEnemyScript;
         }
 
         acScript.Execute(activeCharacter, adventure, cachedSkillCommand);
