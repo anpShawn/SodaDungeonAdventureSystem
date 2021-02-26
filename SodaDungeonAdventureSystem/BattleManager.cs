@@ -138,7 +138,6 @@ public class BattleManager
 
     public void Resume()
     {
-        //Main.Trace("battle is resuming");
         if(!isProcessing)
         {
             isProcessing = true;
@@ -711,8 +710,6 @@ public class BattleManager
                             if (EStatusProc != null)
                                 EStatusProc(character, effects[j]);
                         }
-                        
-                        //expired effects used to be removed right here, now it's a separate step
                     }
 
                     //enforcing limits here also takes care of any status effect damage
@@ -782,20 +779,6 @@ public class BattleManager
                 }
 
                 if(markCharacterAsDead)
-                {
-                    curCharacter.Die();
-                    currentDeadCharacters.Add(curCharacter);
-                }
-            }
-        }
-
-        //TODO special hack: if vacation lord dies, automatically kill any member on their team (the grill)
-        if(vacationLordDied)
-        {
-            for(int i=0; i<enemyTeam.members.Count; i++)
-            {
-                curCharacter = enemyTeam.members[i];
-                if(!curCharacter.dead)
                 {
                     curCharacter.Die();
                     currentDeadCharacters.Add(curCharacter);
